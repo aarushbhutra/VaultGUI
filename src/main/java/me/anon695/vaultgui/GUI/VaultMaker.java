@@ -23,29 +23,34 @@ public class VaultMaker implements CommandExecutor {
             if(!(sender instanceof Player)) {
                 sender.sendMessage("You must be a player to use this command!");
             } else {
-                ItemStack gray = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 7);
-                Player player = (Player) sender;
-                StorageGui gui = Gui.storage()
-                        .title(Component.text(player.getDisplayName() + "'s Vault"))
-                        .rows(6)
-                        .create();
-                GuiItem guiItem = ItemBuilder.from(Material.DIAMOND).name(Component.text("Close", NamedTextColor.RED)).lore(Component.text("Click To Close", NamedTextColor.RED)).asGuiItem(event -> {
-                    gui.close(player);
-                });
-                GuiItem close = ItemBuilder.from(gray).name(Component.text("")) .asGuiItem();
-                gui.setCloseGuiAction(event -> {
-                    player.sendMessage("[Vault] Saving your vault...");
-                    gui.update();
-                    player.sendMessage("[Vault] Vault saved!");
-                });
-                gui.getFiller().fillBetweenPoints(6,1,6,4,close);
-                gui.getFiller().fillBetweenPoints(6,6,6,9,close);
-                gui.disableItemTake();
-                gui.disableItemSwap();
-                gui.disableItemDrop();
-                gui.disableOtherActions();
-                gui.setItem(49, guiItem);
-                gui.open(player);
+                //Check if player has permission vault.vault
+                if(sender.hasPermission("vault.vault")) {
+                    ItemStack gray = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 7);
+                    Player player = (Player) sender;
+                    StorageGui gui = Gui.storage()
+                            .title(Component.text(player.getDisplayName() + "'s Vault"))
+                            .rows(6)
+                            .create();
+                    GuiItem guiItem = ItemBuilder.from(Material.DIAMOND).name(Component.text("Close", NamedTextColor.RED)).lore(Component.text("Click To Close", NamedTextColor.RED)).asGuiItem(event -> {
+                        gui.close(player);
+                    });
+                    GuiItem close = ItemBuilder.from(gray).name(Component.text("")) .asGuiItem();
+                    gui.setCloseGuiAction(event -> {
+                        player.sendMessage("[Vault] Saving your vault...");
+                        gui.update();
+                        player.sendMessage("[Vault] Vault saved!");
+                    });
+                    gui.getFiller().fillBetweenPoints(6,1,6,4,close);
+                    gui.getFiller().fillBetweenPoints(6,6,6,9,close);
+                    gui.disableItemTake();
+                    gui.disableItemSwap();
+                    gui.disableItemDrop();
+                    gui.disableOtherActions();
+                    gui.setItem(49, guiItem);
+                    gui.open(player);
+                } else {
+                    sender.sendMessage("You do not have permission to use this command!");
+                }
             }
         }
         return true;
